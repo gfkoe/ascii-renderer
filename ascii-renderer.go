@@ -1,9 +1,11 @@
 package main
 
 import (
-  "fmt"
+	"ascii-renderer/ascii"
+	"ascii-renderer/render"
+	"fmt"
 )
 
 func main() {
-  fmt.Println("Hello, World!")
+	fmt.Println("Hello, World!")
 }
