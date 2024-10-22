@@ -8,6 +8,7 @@ import (
 	_ "image/png"
 	"log"
 	"os"
+	"strings"
 )
 
 func NewImageConverter() *ImageConverter {
@@ -28,28 +29,19 @@ func (converter *ImageConverter) RenderImage(path string) (string, error) {
 	sz := img.Bounds()
 	w := sz.Max.X
 	h := sz.Max.Y
-	asciis := make([][]ascii.CharPixel, 0, h)
+
+	var result strings.Builder
 
 	for i := 0; i < int(h); i++ {
-		line := make([]ascii.CharPixel, 0, w)
 		for j := 0; j < int(w); j++ {
 			pixel := color.NRGBAModel.Convert(img.At(j, i))
-			pixelAscii := converter.pixelConverter.ConvertToPixelAscii(pixel)
-			line = append(line, pixelAscii)
+			pixelAscii := converter.pixelConverter.ConvertToAscii(pixel)
+			result.WriteString(pixelAscii)
 		}
-		asciis = append(asciis, line)
+		result.WriteString("\n")
 	}
 
-	// Create a string representation of the ASCII art
-	result := ""
-	for _, line := range asciis {
-		for _, pixel := range line {
-			result += string(pixel.Char)
-		}
-		result += "\n" // Add a new line after each row
-	}
-
-	return result, nil
+	return result.String(), nil
 }
 
 func OpenImage(path string) (image.Image, error) {

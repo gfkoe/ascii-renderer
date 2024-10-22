@@ -25,11 +25,6 @@ type PixelConverter interface {
 type PixelAsciiConverter struct{}
 
 func (converter PixelAsciiConverter) ConvertToPixelAscii(pixel color.Color) CharPixel {
-	// r := reflect.ValueOf(pixel).FieldByName("R").Uint()
-	// g := reflect.ValueOf(pixel).FieldByName("G").Uint()
-	// b := reflect.ValueOf(pixel).FieldByName("B").Uint()
-	// a := reflect.ValueOf(pixel).FieldByName("A").Uint()
-
 	r, g, b, a := pixel.RGBA()
 	r8 := uint8(r >> 8)
 	g8 := uint8(g >> 8)
@@ -55,9 +50,9 @@ func (converter PixelAsciiConverter) ConvertToAscii(pixel color.Color) string {
 	pixelVal := converter.ConvertToPixelAscii(pixel)
 	rawChar, r, g, b := pixelVal.Char, pixelVal.R, pixelVal.G, pixelVal.B
 
-	return converter.colorToPixel(rawChar, r, g, b)
+	return converter.colorToPixel(r, g, b, rawChar)
 }
 
 func (converter PixelAsciiConverter) colorToPixel(r, g, b uint8, rawChar byte) string {
-	return fmt.Sprintf("\033[38;2;%d;%d;%dm%c\033[0m", r, g, b, rawChar)
+	return fmt.Sprintf("\033[38;2;%d;%d;%dm%s\033[0m", r, g, b, string([]byte{rawChar}))
 }
