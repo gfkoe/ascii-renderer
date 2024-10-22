@@ -1,11 +1,29 @@
 package main
 
 import (
-	"ascii-renderer/ascii"
-	"ascii-renderer/render"
+	"ascii-renderer/pkg/render"
+	"flag"
 	"fmt"
+	_ "image/jpeg"
+	_ "image/png"
 )
 
+var imagePath string
+
+func init() {
+	flag.StringVar(&imagePath, "f", "", "Path to the image file")
+}
+
 func main() {
-	fmt.Println("Hello, World!")
+	flag.Parse()
+	converter := render.NewImageConverter()
+
+	output, err := converter.RenderImage(imagePath)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	// Print the ASCII art
+	fmt.Print(output)
 }
