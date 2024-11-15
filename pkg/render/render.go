@@ -4,6 +4,7 @@ import (
 	"ascii-renderer/pkg/ascii"
 	"image"
 	"image/color"
+	_ "image/gif"
 	_ "image/jpeg"
 	_ "image/png"
 	"log"
